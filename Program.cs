@@ -31,6 +31,7 @@ namespace join_collections
 
       IEnumerable<ReportItem> millionaireReport = from customer in customers
                                                   where customer.Balance >= 1000000
+                                                  orderby customer.Name.Split(' ')[1] ascending
                                                   join bank in banks on customer.Bank equals bank.Symbol into bankJoin
                                                   from bank in bankJoin
                                                   select new ReportItem()
