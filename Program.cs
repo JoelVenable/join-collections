@@ -9,7 +9,7 @@ namespace join_collections
     static void Main(string[] args)
     {
       List<Bank> banks = new List<Bank>() {
-            new Bank() { Name="First Tennessee", Symbol="FTB"},
+            new Bank(){ Name="First Tennessee", Symbol="FTB"},
             new Bank(){ Name="Wells Fargo", Symbol="WF"},
             new Bank(){ Name="Bank of America", Symbol="BOA"},
             new Bank(){ Name="Citibank", Symbol="CITI"},
@@ -28,7 +28,21 @@ namespace join_collections
             new Customer(){ Name="Sid Brown", Balance=49582.68, Bank="CITI"},
         };
 
-        
+
+      IEnumerable<ReportItem> millionaireReport = from customer in customers
+                                                  where customer.Balance >= 1000000
+                                                  join bank in banks on customer.Bank equals bank.Symbol into bankJoin
+                                                  from bank in bankJoin
+                                                  select new ReportItem()
+                                                  {
+                                                    CustomerName = customer.Name,
+                                                    BankName = bank.Name,
+                                                  };
+
+      millionaireReport.ToList().ForEach(millionaire =>
+      {
+        System.Console.WriteLine($"{millionaire.CustomerName} at {millionaire.BankName}");
+      });
     }
   }
 }
